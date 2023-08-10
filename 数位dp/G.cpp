@@ -48,18 +48,13 @@ int main()
 {
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
-	std::memset(dp,-1,sizeof dp);
-	int cnt=1;
-	for(int i=1;i<=2520;++i)
-		if(2520%i==0)
-			mmp[i]=cnt++;
-	ll l,r;
-	int t;
-	std::cin>>t;
-	while(t--)  //lcm of 1~9 = 2520
+	int q;
+	std::cin>>q;
+	while(q--)
 	{
-		std::cin>>l>>r;
-		std::cout<<digdp(r)-digdp(l-1)<<endl;
+		int b,l,r;
+		std::cin>>b>>l>>r;
+		
 	}
 	return 0;
 }

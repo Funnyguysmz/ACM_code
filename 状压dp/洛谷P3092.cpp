@@ -20,7 +20,7 @@ int dp[15][1<<13];
 // int cal(ll num)
 // {
 // 	int tot=0;
-// 	while(num)
+// 	whle(num)
 // 	{
 // 		tot+=num&1;
 // 		num>>=1;
