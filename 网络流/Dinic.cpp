@@ -1,14 +1,14 @@
-#include<bits/stdc++.h>
+#include<iostream>
+#include<queue>
+#include<cstring>
 #define endl "\n"
+const int maxn=1e5+5,INF=0x3f3f3f3f;
 typedef long long ll;
-const int maxn=1e5+5,maxm=2e5+5,INF=0x3f3f3f3f;
-int head[maxn]; //头节点，这里初始化为-1表示该顶点还没有边
-int to[maxm];   //该边所指向的点的编号
-ll cap[maxm];  //该边的容量
-int nt[maxm];   //下一条边
-int cnt;
+int head[maxn],nt[maxn],to[maxn],cap[maxn],cnt;
+int deep[maxn],work[maxn];
+int S,T,n,m;
 
-void addedge(int u,int v,ll w)
+void add(int u,int v,int w)
 {
     to[cnt]=v;
     cap[cnt]=w;
@@ -16,42 +16,34 @@ void addedge(int u,int v,ll w)
     head[u]=cnt++;
 }
 
-void add(int u,int v,int w)
-{
-    addedge(u,v,w);
-    addedge(v,u,0);
-}
-
-int n,m,s,t;  //n个点，m条边，s是源点，t是汇点
-int ly[maxn],work[maxn];
-
 bool bfs()
 {
     std::queue<int> q;
-    std::memset(ly,-1,sizeof ly);
-    q.push(s);
-    ly[s]=0;  //分层，源点层为0
+    memset(deep,-1,sizeof deep);
+    q.push(S);
+    deep[S]=0;
     while(!q.empty())
     {
-        int now=q.front();q.pop();
-        for(int i=head[now];~i;i=nt[i])
+        int now=q.front();
+        q.pop();
+        for(int i=head[now];i!=-1;i=nt[i])
         {
-            if(ly[to[i]]>=0||!cap[i]) continue;
-            ly[to[i]]=ly[now]+1;
-            if(to[i]==t) return true;
+            if(deep[to[i]]>=0||!cap[i]) continue;
+            deep[to[i]]=deep[now]+1;
+            if(to[i]==T) return true;
             q.push(to[i]);
         }
     }
     return false;
 }
 
-ll dfs(int cur,ll inc)
+int dfs(int cur,int inc)
 {
-    ll tinc;
-    if(cur==t) return inc;
-    for(int &i=work[cur];~i;i=nt[i])
+    int tinc;
+    if(cur==T) return inc;
+    for(int &i=work[cur];i!=-1;i=nt[i])
     {
-        if(cap[i]&&ly[to[i]]==ly[cur]+1&&(tinc=dfs(to[i],std::min(inc,cap[i]))))
+        if(cap[i]&&deep[to[i]]==deep[cur]+1&&(tinc=dfs(to[i],std::min(inc,cap[i]))))
         {
             cap[i]-=tinc;
             cap[i^1]+=tinc;
@@ -61,29 +53,33 @@ ll dfs(int cur,ll inc)
     return 0;
 }
 
-ll Dinic()
+int dinic()
 {
-    ll ret=0,tinc;
+    int ret=0,tinc;
     while(bfs())
     {
-        for(int i=0;i<=n;++i) work[i]=head[i];
-        while(tinc=dfs(s,1e18)) ret+=tinc;
+        memcpy(work,head,sizeof head);
+        while((tinc=dfs(S,INF))) ret+=tinc;
     }
     return ret;
 }
 
 int main()
 {
+    //freopen("test06.in","r",stdin);
     std::ios::sync_with_stdio(false);
-    std::cin.tie(nullptr);
-    std::cin>>n>>m>>s>>t;
-    std::memset(head,-1,sizeof head);
-    for(int i=1;i<=m;++i)
+    std::cin.tie(0);
+    while(std::cin>>m>>n)
     {
-        int u,v,w;
-        std::cin>>u>>v>>w;
-        add(u,v,w);
+        memset(head,-1,sizeof head);
+        S=1,T=n;
+        for(int i=1;i<=m;++i)
+        {
+            int u,v,w;
+            std::cin>>u>>v>>w;
+            add(u,v,w);
+            add(v,u,0);
+        }
+        std::cout<<dinic()<<endl;
     }
-    std::cout<<Dinic()<<endl;
-    return 0;
 }
