@@ -2,7 +2,7 @@
 #include<queue>
 #include<cstring>
 #define endl "\n"
-const int maxn=1e6+5,INF=0x3f3f3f3f;
+const int maxn=3e5+5,INF=0x3f3f3f3f;
 typedef long long ll;
 int head[5005],nt[maxn],to[maxn],cap[maxn],cnt;
 int deep[5005],work[5005];
