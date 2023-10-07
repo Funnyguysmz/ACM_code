@@ -3,8 +3,7 @@
 typedef long long ll;
 const int maxn=2e5+5;
 int t;
-int n;
-int a[maxn],c[maxn];
+ll n;
 
 int main()
 {
@@ -14,14 +13,13 @@ int main()
 	while(t--)
 	{
 		std::cin>>n;
-		for(int i=1;i<=n;++i)
+		ll ans=(1ll+n)*n/2ll;
+		ll v=1;
+		while(v<=n)
 		{
-			std::cin>>a[i];
+			ans-=(v<<1);
+			v<<=1;
 		}
-		for(int i=1;i<=n;++i)
-		{
-			std::cin>>c[i];
-		}
-		
+		std::cout<<ans<<endl;
 	}
 }
